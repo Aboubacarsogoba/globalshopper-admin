@@ -1,0 +1,36 @@
+/* src/styles.scss */
+@use 'sass:color';
+
+:root{
+  --gs-blue: #3f73b4;
+  --gs-blue-600: #2f5a8c;
+  --gs-gold: #dba628;
+  --gs-gray-50:#f7f8fb;
+  --gs-gray-100:#eef1f6;
+  --gs-gray-300:#d9dee8;
+  --gs-text:#2b2b2b;
+  --radius: 16px;
+  --shadow: 0 6px 16px rgba(0,0,0,.06);
+}
+html,body{height:100%}
+body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;color:var(--gs-text);background:var(--gs-gray-50)}
+a{color:inherit;text-decoration:none}
+
+/* Petites utilitaires */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gs-gray-100)}
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;border-radius:12px;border:1px solid var(--gs-blue-600);
+  background:var(--gs-blue); color:#fff; padding:.65rem 1rem; cursor:pointer;
+  &:hover{background:var(--gs-blue-600)}
+}
+.btn-outline{background:#fff;color:var(--gs-blue);border-color:var(--gs-blue)}
+.input{
+  width:100%; border:1px solid #f3e4c4; border-radius:12px; padding:.8rem 1rem; outline:none;
+  &:focus{border-color:var(--gs-gold); box-shadow:0 0 0 3px rgba(219, 166, 40, 0.15)}
+}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:14px;border-bottom:1px solid var(--gs-gray-100);background:#fff}
+.table thead th{background:#fff;font-weight:600;color:#6b7280}
+.pill{padding:.25rem .5rem;border-radius:999px;background:var(--gs-gray-100)}
+.progress{height:8px;background:#e5e7eb;border-radius:8px;overflow:hidden}
+.progress > span{display:block;height:100%;background:var(--gs-blue)}

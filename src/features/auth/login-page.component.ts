@@ -77,9 +77,11 @@ import { AuthService } from '../../core/services/auth.service';
   .logo-container{display:flex;flex-direction:column;align-items:center}
   .logo-img{width:700px;height:auto;object-fit:contain;margin-bottom:1rem}
   .right{flex:1;background:#3f73b4;display:flex;justify-content:center;align-items:center;color:#fff;padding:24px}
-  .panel{width:380px;max-width:95vw;border-radius:20px;padding:20px;background:#fff;color:#111}
+  .panel{width:450px;max-width:95vw;border-radius:20px;padding:20px;background:#fff;color:#111}
   form{display:grid;gap:8px}
   .label{display:block;margin:0 0 4px 2px;font-weight:600;color:#374151}
+  .input{width:94%;border:1px solid #f3e4c4;border-radius:8px;padding:.6rem .8rem;outline:none;font-size:14px}
+  .input:focus{border-color:var(--gs-gold);box-shadow:0 0 0 3px rgba(219, 166, 40, 0.15)}
   .password-wrap{position:relative}
   .password-wrap .toggle{
     position:absolute;right:8px;top:50%;transform:translateY(-50%);

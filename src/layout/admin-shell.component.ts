@@ -11,8 +11,9 @@ import { AuthService } from '../core/services/auth.service';
   <div class="shell">
     <aside class="sidebar card">
       <div class="brand">
-        <div class="logo">G</div>
-        <div class="txt"><b>lobal</b><span>Shopper</span></div>
+        <div class="logo-container">
+          <img src="assets/globalshopper.png" alt="Global Shopper Logo" class="logo-img" />
+        </div>
       </div>
 
       <nav>
@@ -53,9 +54,9 @@ import { AuthService } from '../core/services/auth.service';
   styles:[`
   .shell{display:grid;grid-template-columns:260px 1fr;height:100vh;gap:16px;padding:16px}
   .sidebar{padding:16px;display:flex;flex-direction:column;gap:12px;background:#f3f7fb}
-  .brand{display:flex;align-items:center;gap:.6rem;margin-bottom:8px}
-  .brand .logo{width:40px;height:40px;border-radius:50%;background:var(--gs-blue);color:#fff;display:grid;place-content:center;font-weight:800}
-  .brand .txt span{color:var(--gs-gold)}
+  .brand{display:flex;justify-content:center;margin-bottom:8px}
+  .logo-container{width:120px;height:120px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .logo-img{width:100%;height:100%;object-fit:contain}
   nav{display:grid;gap:8px;margin-top:8px}
   nav a{padding:.8rem 1rem;border-radius:12px;border:1px solid var(--gs-gray-100);background:#fff;display:flex;align-items:center;gap:.6rem}
   nav a.active{background:var(--gs-gray-50);border-color:var(--gs-blue);box-shadow:inset 0 0 0 1px var(--gs-blue)}

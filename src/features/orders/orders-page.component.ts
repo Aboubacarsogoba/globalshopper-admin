@@ -23,13 +23,19 @@ import { CommonModule } from '@angular/common';
           <td><div class="progress"><span [style.width.%]="r.avance"></span></div></td>
           <td>{{r.deadline}}</td>
           <td>⏳</td>
-          <td><button class="btn btn-outline">🗑️</button></td>
+          <td>
+            <button class="btn btn-outline btn-trash" aria-label="Supprimer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M9 3h6a1 1 0 0 1 1 1v1h4a1 1 0 1 1 0 2h-1.1l-1.02 12.24A3 3 0 0 1 14.89 22H9.11a3 3 0 0 1-2.99-2.76L5.1 7H4a1 1 0 1 1 0-2h4V4a1 1 0 0 1 1-1Zm1 2v0h4V4h-4v1Zm-2.9 2l.98 11.76c.07.83.77 1.24 1.93 1.24h5.78c1.16 0 1.86-.41 1.93-1.24L18.9 7H7.1ZM10 9a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0v-7a1 1 0 0 1 1-1Zm4 0a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0v-7a1 1 0 0 1 1-1Z"/>
+              </svg>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
   `,
-  styles:[`.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:12px}.spacer{flex:1}`]
+  styles:[`.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:12px}.spacer{flex:1}.table{width:100%;border-collapse:collapse}.table thead th{background:#f9fafb;color:#374151}.table th,.table td{padding:12px 16px;border-bottom:1px solid #e5e7eb;font-size:.95rem;vertical-align:middle;text-align:center}.table tbody tr:hover{background:#f9fafb}.btn.btn-outline.btn-trash{color:#ef4444;border-color:#fecaca}.btn.btn-outline.btn-trash svg{width:18px;height:18px;display:block;fill:currentColor}.btn.btn-outline.btn-trash:hover{background:#fee2e2}`]
 })
 export class OrdersPageComponent{
   rows = [

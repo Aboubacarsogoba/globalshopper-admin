@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
     </table>
   </div>
   `,
-  styles:[`.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:12px}.spacer{flex:1}`]
+  styles:[`.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:12px}.spacer{flex:1}.toolbar .input{width:200px}.table{width:100%;border-collapse:collapse}.table thead th{background:#f9fafb;color:#374151}.table th,.table td{padding:12px 16px;border-bottom:1px solid #e5e7eb;font-size:.95rem;vertical-align:middle;text-align:center}.table tbody tr:hover{background:#f9fafb}`]
 })
 export class TxPageComponent{
   q = signal('');

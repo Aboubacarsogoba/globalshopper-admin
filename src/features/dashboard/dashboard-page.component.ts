@@ -11,10 +11,10 @@ type Row = { id:string; produit:string; moq:number; reserve:number; avance:numbe
   template:`
   <div class="grid gap">
     <div class="stats">
-      <app-stat-card icon="👥" [value]="20 | number" label="Partenaires"/>
-      <app-stat-card icon="📦" [value]="100 | number" label="Produits en ligne"/>
-      <app-stat-card icon="🛒" [value]="500 | number" label="Commandes"/>
-      <app-stat-card icon="💳" [value]="40 | number" label="Transaction"/>
+      <app-stat-card icon="assets/fournisseur.png" [value]="20 | number" label="Partenaires"/>
+      <app-stat-card icon="assets/produit.png" [value]="100 | number" label="Produits en ligne"/>
+      <app-stat-card icon="assets/commande.png" [value]="500 | number" label="Commandes"/>
+      <app-stat-card icon="assets/transaction.png" [value]="40 | number" label="Transaction"/>
     </div>
 
     <div class="card" style="padding:16px">
@@ -58,6 +58,8 @@ type Row = { id:string; produit:string; moq:number; reserve:number; avance:numbe
   .grid{display:grid;gap:16px}
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   .kpis{display:flex;justify-content:space-between;gap:16px;align-items:center}
+  .kpis .progress{margin-top:8px}
+  .kpis small{display:block;margin-top:12px}
   .text-right{text-align:right}
   `]
 })

@@ -22,6 +22,8 @@ import { AuthService } from '../../core/services/auth.service';
       <div class="panel card" role="form" aria-labelledby="loginTitle">
         <h3 id="loginTitle">Connectez-vous à votre tableau de bord</h3>
 
+        <div *ngIf="apiError" class="api-error" role="alert">{{ apiError }}</div>
+
         <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
           <!-- Email -->
           <label>
@@ -33,6 +35,7 @@ import { AuthService } from '../../core/services/auth.service';
               placeholder="exemple@domaine.com"
               autocomplete="email"
               [attr.aria-invalid]="emailInvalid() ? 'true' : null"
+              [disabled]="loading"
             />
             <small class="error" *ngIf="emailInvalid()">Adresse e-mail invalide</small>
           </label>
@@ -49,6 +52,7 @@ import { AuthService } from '../../core/services/auth.service';
                 autocomplete="current-password"
                 minlength="4"
                 [attr.aria-invalid]="passwordInvalid() ? 'true' : null"
+                [disabled]="loading"
               />
               <button type="button" class="toggle" (click)="togglePwd()" aria-label="Afficher/masquer le mot de passe">
                 {{ hidePwd ? '👁️' : '🙈' }}
@@ -64,7 +68,9 @@ import { AuthService } from '../../core/services/auth.service';
               Se souvenir de moi
             </label>
 
-            <button class="btn" type="submit" [disabled]="form.invalid">Se connecter</button>
+            <button class="btn" type="submit" [disabled]="form.invalid || loading">
+              {{ loading ? 'Connexion…' : 'Se connecter' }}
+            </button>
           </div>
         </form>
       </div>
@@ -90,6 +96,7 @@ import { AuthService } from '../../core/services/auth.service';
   .actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
   .remember{font-size:.95rem;color:#6b7280;display:flex;align-items:center;gap:.4rem}
   .error{color:#b91c1c;font-size:.85rem;margin-top:4px}
+  .api-error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;padding:8px 10px;border-radius:8px;margin:8px 0}
   @media (max-width: 900px){ .left{display:none} .right{flex:1} }
   `]
 })
@@ -99,6 +106,8 @@ export class LoginPageComponent {
 
   // état UI (booléen simple pour compat max)
   hidePwd = true;
+  loading = false;
+  apiError: string | null = null;
 
   // Reactive form
   form = this.fb.group({
@@ -127,6 +136,20 @@ export class LoginPageComponent {
     if (remember) localStorage.setItem('remember_email', email);
     else localStorage.removeItem('remember_email');
 
-    this.auth.login(email, password);
+    this.loading = true;
+    this.apiError = null;
+    this.auth.login(email, password).subscribe({
+      next: () => {
+        // Navigation effectuée dans le service
+      },
+      error: (err: any) => {
+        const status = err?.status;
+        const message = err?.error?.message || err?.message;
+        if (status === 401) this.apiError = 'Identifiant ou mot de passe incorrect.';
+        else if (status === 400) this.apiError = message || 'Requête invalide.';
+        else if (status === 0) this.apiError = 'Impossible de joindre le serveur. Vérifiez votre connexion.';
+        else this.apiError = message || 'Une erreur est survenue. Veuillez réessayer.';
+      }
+    }).add(() => { this.loading = false; });
   }
 }

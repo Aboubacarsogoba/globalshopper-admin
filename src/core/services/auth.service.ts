@@ -1,28 +1,62 @@
 // src/app/core/services/auth.service.ts
-import { Injectable, signal } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
+import { API_URL } from '../tokens';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = signal<{ fullName:string; role:'ADMIN'|'MANAGER'|'USER'}|null>(null);
 
-  constructor(private router: Router){ 
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    @Inject(API_URL) private apiUrl: string
+  ){ 
     const raw = localStorage.getItem('auth_user');
     if(raw) this.user.set(JSON.parse(raw));
   }
 
-  login(email: string, password: string){
-    // TODO call API. MVP: succès factice si non vide
-    if(email && password){
-      const u = { fullName: 'M. SOGOBA', role: 'ADMIN' as const };
-      localStorage.setItem('access_token','demo');
-      localStorage.setItem('auth_user', JSON.stringify(u));
-      this.user.set(u);
-      this.router.navigateByUrl('/dashboard');
-    }
+  login(identifiant: string, motDePasse: string){
+    return this.http.post<{ accessToken: string; refreshToken: string }>(
+      `${this.apiUrl}/auth/login`,
+      { identifiant, motDePasse },
+      { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
+    ).pipe(
+      tap(({ accessToken, refreshToken }) => {
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
+        this.user.set(this.user() ?? null);
+        this.router.navigateByUrl('/dashboard');
+      })
+    );
   }
+
+  refresh(){
+    const refreshToken = localStorage.getItem('refresh_token') ?? '';
+    return this.http.post<{ accessToken: string; refreshToken: string }>(
+      `${this.apiUrl}/auth/refresh`,
+      { refreshToken },
+      { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
+    ).pipe(
+      tap(({ accessToken, refreshToken }) => {
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
+      })
+    );
+  }
+
   logout(){
+    const refreshToken = localStorage.getItem('refresh_token') ?? '';
+    this.http.post(
+      `${this.apiUrl}/auth/logout`,
+      { refreshToken },
+      { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
+    ).subscribe({ complete: () => {} , error: () => {} });
+
     localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('auth_user');
     this.user.set(null);
     this.router.navigateByUrl('/login');

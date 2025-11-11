@@ -25,19 +25,19 @@ import { AuthService } from '../../core/services/auth.service';
         <div *ngIf="apiError" class="api-error" role="alert">{{ apiError }}</div>
 
         <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-          <!-- Email -->
+          <!-- Identifiant (email ou téléphone) -->
           <label>
-            <span class="label">E-mail</span>
+            <span class="label">Email ou numéro de téléphone</span>
             <input
               class="input"
-              type="email"
+              type="text"
               formControlName="email"
-              placeholder="exemple@domaine.com"
-              autocomplete="email"
+              placeholder="exemple@domaine.com ou +223 92 11 30 06"
+              autocomplete="username"
               [attr.aria-invalid]="emailInvalid() ? 'true' : null"
               [disabled]="loading"
             />
-            <small class="error" *ngIf="emailInvalid()">Adresse e-mail invalide</small>
+            <small class="error" *ngIf="emailInvalid()">Identifiant requis</small>
           </label>
 
           <!-- Mot de passe -->
@@ -111,7 +111,7 @@ export class LoginPageComponent {
 
   // Reactive form
   form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(4)]],
     remember: [false]
   });
@@ -132,13 +132,15 @@ export class LoginPageComponent {
   submit() {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     const { email, password, remember } = this.form.getRawValue();
+    const ident = (email ?? '').trim();
+    const pwd = (password ?? '').trim();
 
-    if (remember) localStorage.setItem('remember_email', email);
+    if (remember) localStorage.setItem('remember_email', ident);
     else localStorage.removeItem('remember_email');
 
     this.loading = true;
     this.apiError = null;
-    this.auth.login(email, password).subscribe({
+    this.auth.login(ident, pwd).subscribe({
       next: () => {
         // Navigation effectuée dans le service
       },

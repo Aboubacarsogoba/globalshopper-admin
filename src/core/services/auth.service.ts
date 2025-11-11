@@ -25,8 +25,8 @@ export class AuthService {
       { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
     ).pipe(
       tap(({ accessToken, refreshToken }) => {
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
         this.user.set(this.user() ?? null);
         this.router.navigateByUrl('/dashboard');
       })
@@ -34,29 +34,29 @@ export class AuthService {
   }
 
   refresh(){
-    const refreshToken = localStorage.getItem('refresh_token') ?? '';
+    const refreshToken = localStorage.getItem('refreshToken') ?? '';
     return this.http.post<{ accessToken: string; refreshToken: string }>(
       `${this.apiUrl}/auth/refresh`,
       { refreshToken },
       { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
     ).pipe(
       tap(({ accessToken, refreshToken }) => {
-        localStorage.setItem('access_token', accessToken);
-        localStorage.setItem('refresh_token', refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
       })
     );
   }
 
   logout(){
-    const refreshToken = localStorage.getItem('refresh_token') ?? '';
+    const refreshToken = localStorage.getItem('refreshToken') ?? '';
     this.http.post(
       `${this.apiUrl}/auth/logout`,
       { refreshToken },
-      { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } }
+      { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, responseType: 'text' as const }
     ).subscribe({ complete: () => {} , error: () => {} });
 
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('auth_user');
     this.user.set(null);
     this.router.navigateByUrl('/login');

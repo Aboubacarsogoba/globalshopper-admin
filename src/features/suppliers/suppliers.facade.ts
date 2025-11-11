@@ -8,6 +8,6 @@ export class SuppliersFacade{
   items = signal<any[]>([]);
   constructor(private repo: SuppliersRepository){}
   load(q:any={}){ this.loading.set(true);
-    this.repo.list(q).pipe(finalize(()=>this.loading.set(false))).subscribe((res: any) => this.items.set(res.data));
+    this.repo.list(q).pipe(finalize(()=>this.loading.set(false))).subscribe((res: any) => this.items.set(res));
   }
 }

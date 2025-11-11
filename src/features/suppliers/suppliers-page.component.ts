@@ -1,6 +1,7 @@
 // src/app/features/suppliers/suppliers-page.component.ts
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SuppliersFacade } from './suppliers.facade';
 
 type Supplier = { id:string; name:string; email:string; phone:string; active:boolean; kyc:'ok'|'warn'|'ko' };
 
@@ -94,14 +95,24 @@ type Supplier = { id:string; name:string; email:string; phone:string; active:boo
   `]
 })
 export class SuppliersPageComponent{
+  private facade = inject(SuppliersFacade);
   q = signal('');
-  suppliers = signal<Supplier[]>([
-    {id:'1', name:'Aboubacar sogoba', email:'ab9460419@gmail.com', phone:'+223 92 11 30 06', active:true, kyc:'warn'},
-    {id:'2', name:'Amadou sogoba', email:'ab9460419@gmail.com', phone:'+223 85 47 47 57', active:false, kyc:'ko'},
-  ]);
-  filtered = () =>
-    this.suppliers().filter(s => s.name.toLowerCase().includes(this.q().toLowerCase()));
-  
+  suppliers = computed<Supplier[]>(() =>
+    (this.facade.items() || []).map((r: any) => ({
+      id: String(r.id ?? ''),
+      name: `${r.prenom ?? ''} ${r.nom ?? ''}`.trim(),
+      email: r.email ?? '',
+      phone: r.telephone ?? '',
+      active: !!r.actif,
+      kyc: 'ok'
+    }))
+  );
+  filtered = () => this.suppliers().filter(s => s.name.toLowerCase().includes(this.q().toLowerCase()));
+
+  constructor(){
+    this.facade.load();
+  }
+
   handleSearch(event: Event) {
     const target = event.target as HTMLInputElement;
     this.q.set(target.value);
